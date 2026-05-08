@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>World Trivia Challenge – Free Online Quiz Game | Konkou Konesans</title>
+
+  <!-- PWA META TAGS -->
+  <link rel="manifest" href="/static/manifest.json"/>
+  <meta name="theme-color" content="#f0c040"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Konkou"/>
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/icon-152.png"/>
+  <meta name="description" content="World Trivia Challenge – Free multilingual quiz game in Haitian Creole, French and English. Test your knowledge on geography, history, science, sports and more!"/>
+  <meta name="keywords" content="quiz, trivia, world challenge, kreyol, haitian creole, français, english, geography, history, science, education, septa, haiti"/>
+  <meta property="og:title" content="World Trivia Challenge – Free Online Quiz Game"/>
+  <meta property="og:description" content="Test your knowledge in Kreyòl, Français or English. 10 categories, 3 difficulty levels, global leaderboard."/>
+  <meta property="og:type" content="website"/>
+
+  <!-- GOOGLE ADSENSE: Kole script AdSense ou a la apre apwobasyon:
+       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-VOTRE_ID" crossorigin="anonymous"></script>
+  -->
+  <!-- PWA -->
+  <link rel="manifest" href="/static/manifest.json"/>
+  <meta name="theme-color" content="#f0c040"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Konkou"/>
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png"/>
+  <meta name="description" content="World Trivia Challenge – Free multilingual quiz in Haitian Creole, French and English. 10 categories, 3 levels, global leaderboard."/>
+  <meta name="keywords" content="quiz,trivia,kreyol,haiti,francais,english,education,septa"/>
+  <!-- GOOGLE ADSENSE: remplacez ce commentaire par votre script AdSense apre approbation
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXX" crossorigin="anonymous"></script>
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0a0f;--surface:#12121a;--card:#1a1a26;--border:#2a2a3d;--accent:#f0c040;--accent2:#e05c3a;--accent3:#4ab8c8;--text:#f0ede8;--muted:#8888aa;--correct:#3fc87a;--wrong:#e05c3a;--r:16px}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(240,192,64,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 80%,rgba(74,184,200,.06) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 60% 10%,rgba(224,92,58,.05) 0%,transparent 60%);pointer-events:none;z-index:0}
+    .cb{width:100%;background:rgba(240,192,64,.06);border-bottom:1px solid rgba(240,192,64,.15);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px)}
+    .cb-l{display:flex;align-items:center;gap:10px;font-size:.82rem;color:var(--muted)}
+    .cb-av{width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0}
+    .cb-av img{width:100%;height:100%;object-fit:cover}
+    .cb-cn{color:var(--accent);font-weight:700;font-family:'Syne',sans-serif}
+    .lang-sw{display:flex;gap:4px;background:rgba(255,255,255,.05);border-radius:8px;padding:3px}
+    .lang-btn{padding:4px 10px;border-radius:6px;border:none;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase}
+    .lang-btn.active{background:var(--accent);color:#0a0a0f}
+    .wrap{position:relative;z-index:1;width:100%;max-width:720px;padding:24px 16px 80px}
+    header{text-align:center;padding:32px 0 24px}
+    .logo{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,6vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1}
+    .logo span:first-child{color:var(--accent)}.logo span:last-child{color:var(--text)}
+    .tagline{font-size:clamp(.8rem,2.5vw,.95rem);color:var(--muted);margin-top:8px;font-weight:300;letter-spacing:.08em;text-transform:uppercase}
+    .sc{display:none;animation:fu .4s ease}.sc.on{display:block}
+    @keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .stit{font-family:'Syne',sans-serif;font-size:clamp(1rem,3vw,1.3rem);font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+    .stit::before{content:'';display:inline-block;width:4px;height:1.2em;background:var(--accent);border-radius:2px}
+    .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;margin-bottom:24px}
+    .cbtn{background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:16px 12px;cursor:pointer;text-align:center;transition:all .2s;color:var(--text);font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:500}
+    .cbtn .ic{font-size:1.7rem;display:block;margin-bottom:6px}
+    .cbtn:hover,.cbtn.on{border-color:var(--accent);background:rgba(240,192,64,.08);transform:translateY(-2px);box-shadow:0 8px 24px rgba(240,192,64,.12)}
+    .cbtn.on{background:rgba(240,192,64,.12)}
+    .drow{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+    .dbtn{flex:1;min-width:85px;padding:11px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--muted);font-family:'Outfit',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.05em}
+    .dbtn:hover{border-color:var(--accent3);color:var(--accent3)}
+    .dbtn.on{border-color:var(--accent3);color:var(--accent3);background:rgba(74,184,200,.1)}
+    .bp{width:100%;padding:17px;background:var(--accent);color:#0a0a0f;border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:all .2s;text-transform:uppercase}
+    .bp:hover{background:#f8d060;transform:translateY(-2px);box-shadow:0 10px 30px rgba(240,192,64,.25)}
+    .bp:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .bs{padding:11px 22px;background:transparent;color:var(--muted);border:1.5px solid var(--border);border-radius:10px;font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;transition:all .2s}
+    .bs:hover{border-color:var(--muted);color:var(--text)}
+    .qh{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:12px}
+    .qi{font-family:'Syne',sans-serif;font-size:.83rem;color:var(--muted);font-weight:600;white-space:nowrap}
+    .qi span{color:var(--accent)}
+    .pb{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+    .pf{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .5s ease}
+    .sb{font-family:'Syne',sans-serif;font-size:.83rem;font-weight:700;color:var(--accent3);background:rgba(74,184,200,.1);border:1px solid rgba(74,184,200,.25);padding:5px 12px;border-radius:20px;white-space:nowrap}
+    .tw{display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+    .tr{position:relative;width:60px;height:60px}
+    .tr svg{transform:rotate(-90deg)}
+    .tr circle{fill:none;stroke-width:4}
+    .tr .bg{stroke:var(--border)}
+    .tr .tp{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+    .tr .ug{stroke:var(--wrong)}
+    .tn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
+    .qcard{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:clamp(18px,5vw,30px);margin-bottom:18px}
+    .qm{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;font-weight:500}
+    .qm .ct{color:var(--accent);background:rgba(240,192,64,.1);padding:3px 10px;border-radius:20px;margin-right:8px}
+    .qt{font-family:'Syne',sans-serif;font-size:clamp(.98rem,3.5vw,1.22rem);font-weight:600;line-height:1.5;color:var(--text)}
+    .ol{display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+    .ob{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:15px 18px;cursor:pointer;text-align:left;color:var(--text);font-family:'Outfit',sans-serif;font-size:clamp(.88rem,2.5vw,.98rem);font-weight:400;transition:all .2s;display:flex;align-items:center;gap:12px;line-height:1.4}
+    .olt{min-width:30px;height:30px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;flex-shrink:0;transition:all .2s}
+    .ob:hover:not(:disabled){border-color:var(--accent);background:rgba(240,192,64,.06);transform:translateX(4px)}
+    .ob:hover:not(:disabled) .olt{background:var(--accent);color:#0a0a0f;border-color:var(--accent)}
+    .ob.ok{border-color:var(--correct);background:rgba(63,200,122,.1)}
+    .ob.ok .olt{background:var(--correct);color:#0a0a0f;border-color:var(--correct)}
+    .ob.ng{border-color:var(--wrong);background:rgba(224,92,58,.08)}
+    .ob.ng .olt{background:var(--wrong);color:#fff;border-color:var(--wrong)}
+    .ob:disabled{cursor:not-allowed}
+    /* Auto-advance bar */
+    .abar{height:4px;background:var(--border);border-radius:2px;margin-bottom:16px;overflow:hidden;display:none}
+    .abar.show{display:block}
+    .afill{height:100%;background:var(--accent);border-radius:2px;width:100%;transition:none}
+    .fb{display:none;padding:13px 18px;border-radius:12px;font-size:.88rem;font-weight:500;margin-bottom:16px;animation:fu .3s ease}
+    .fb.on{display:flex;align-items:center;gap:10px}
+    .fb.ok{background:rgba(63,200,122,.12);border:1px solid rgba(63,200,122,.3);color:var(--correct)}
+    .fb.ng{background:rgba(224,92,58,.1);border:1px solid rgba(224,92,58,.25);color:var(--accent2)}
+    .rw{text-align:center}
+    .rring{position:relative;width:150px;height:150px;margin:0 auto 24px}
+    .rring svg{transform:rotate(-90deg)}
+    .rring circle{fill:none;stroke-width:10}
+    .rring .bg{stroke:var(--border)}
+    .rring .pg{stroke:var(--accent);stroke-linecap:round;transition:stroke-dashoffset 1.5s ease}
+    .rctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .rpct{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)}
+    .rlb{font-size:.73rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+    .rtit{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2rem);font-weight:800;margin-bottom:8px}
+    .rsub{color:var(--muted);font-size:.95rem;margin-bottom:28px}
+    .sg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+    .sb2{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 8px;text-align:center}
+    .sv{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;display:block}
+    .sk{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
+    .sb2:nth-child(1) .sv{color:var(--correct)}.sb2:nth-child(2) .sv{color:var(--wrong)}.sb2:nth-child(3) .sv{color:var(--accent3)}
+    .rbts{display:flex;flex-direction:column;gap:10px}
+    .lbl{margin-bottom:22px}
+    .li{display:flex;align-items:center;gap:12px;padding:13px 15px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:7px}
+    .li.top{border-color:rgba(240,192,64,.35);background:rgba(240,192,64,.05)}
+    .lr{font-family:'Syne',sans-serif;font-weight:800;font-size:.98rem;color:var(--muted);min-width:26px;text-align:center}
+    .lr.g{color:#f0c040}.lr.s{color:#c0c0c0}.lr.b{color:#cd7f32}
+    .lif{flex:1}.ln{font-weight:600;font-size:.93rem}.lm{font-size:.73rem;color:var(--muted);margin-top:2px}
+    .ls{font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:.93rem}
+    .lem{text-align:center;color:var(--muted);padding:28px;font-size:.88rem}
+    .nw{margin-bottom:22px}
+    .nw label{display:block;font-size:.83rem;color:var(--muted);margin-bottom:7px;text-transform:uppercase;letter-spacing:.08em}
+    .ni{width:100%;padding:13px 15px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:1rem;outline:none;transition:border-color .2s}
+    .ni:focus{border-color:var(--accent)}.ni::placeholder{color:var(--muted)}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1px solid var(--accent);color:var(--accent);padding:11px 22px;border-radius:30px;font-family:'Syne',sans-serif;font-size:.86rem;font-weight:600;z-index:1000;transition:transform .3s ease;white-space:nowrap}
+    .toast.on{transform:translateX(-50%) translateY(0)}
+    .ntabs{display:flex;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:5px;margin-bottom:22px}
+    .ntab{flex:1;padding:9px;border-radius:8px;border:none;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.05em}
+    .ntab.on{background:var(--accent);color:#0a0a0f}
+    .rfb{background:none;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 13px;font-size:.78rem;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;margin-bottom:14px}
+    .rfb:hover{border-color:var(--accent3);color:var(--accent3)}
+
+    /* ══ PREMIUM & GAMIFICATION ══════════════════════════════════ */
+    .usr-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 16px;margin-bottom:16px}
+    .usr-info{display:flex;align-items:center;gap:10px}
+    .usr-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#0a0a0f;flex-shrink:0;border:2px solid transparent;transition:border-color .3s}
+    .usr-av.prem{border-color:var(--accent);box-shadow:0 0 14px rgba(240,192,64,.35)}
+    .usr-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem}
+    .usr-lv{font-size:.7rem;color:var(--muted);margin-top:1px}
+    .usr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+    .pts-disp{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent);font-size:.98rem}
+    .pts-lbl{font-size:.67rem;color:var(--muted)}
+    .ptag-p{background:linear-gradient(135deg,#f0c040,#e05c3a);color:#0a0a0f;font-family:'Syne',sans-serif;font-size:.63rem;font-weight:800;padding:2px 9px;border-radius:10px;letter-spacing:.06em}
+    .ptag-f{background:var(--surface);color:var(--muted);border:1px solid var(--border);font-family:'Syne',sans-serif;font-size:.63rem;font-weight:700;padding:2px 9px;border-radius:10px}
+    .streak-bar{display:flex;align-items:center;gap:8px;background:rgba(240,192,64,.06);border:1px solid rgba(240,192,64,.15);border-radius:10px;padding:8px 14px;margin-bottom:13px;font-size:.82rem}
+    .sk-fire{font-size:1.1rem}.sk-cnt{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent)}
+    .sk-txt{color:var(--muted);flex:1}
+    .sk-btn{background:var(--accent);color:#0a0a0f;border:none;border-radius:8px;padding:4px 12px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;transition:all .2s}
+    .sk-btn:hover{background:#f8d060}.sk-btn:disabled{opacity:.5;cursor:not-allowed}
+    .daily-card{display:flex;align-items:center;gap:12px;padding:13px 16px;background:linear-gradient(135deg,rgba(74,184,200,.1),rgba(74,184,200,.04));border:1.5px solid rgba(74,184,200,.22);border-radius:14px;cursor:pointer;transition:all .22s;margin-bottom:13px}
+    .daily-card:hover{border-color:var(--accent3);transform:translateY(-1px)}
+    .daily-card.done{opacity:.55;cursor:default}
+    .dc-icon{font-size:1.6rem;flex-shrink:0}.dc-info{flex:1}
+    .dc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem}
+    .dc-sub{font-size:.73rem;color:var(--muted);margin-top:2px}
+    .dc-pts{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent3);font-size:.85rem;white-space:nowrap}
+    .lv-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 15px;margin-bottom:13px}
+    .lv-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+    .lv-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.83rem;color:var(--accent)}
+    .lv-next{font-size:.7rem;color:var(--muted)}
+    .lv-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+    .lv-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .9s ease}
+    .lim-bar{display:flex;align-items:center;gap:8px;background:rgba(224,92,58,.07);border:1px solid rgba(224,92,58,.18);border-radius:10px;padding:9px 13px;margin-bottom:13px;font-size:.8rem}
+    .lim-cnt{font-family:'Syne',sans-serif;font-weight:800;color:var(--accent2)}
+    .lim-txt{flex:1;color:var(--muted)}
+    .lim-up{background:linear-gradient(135deg,var(--accent),#f8a030);color:#0a0a0f;border:none;border-radius:8px;padding:4px 11px;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s}
+    .lim-up:hover{transform:scale(1.05)}
+    .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:600;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
+    .modal-ov.off{display:none}
+    .modal-box{background:var(--card);border:1.5px solid var(--border);border-radius:24px 24px 0 0;padding:26px 22px 38px;width:100%;max-width:500px;animation:su .35s cubic-bezier(.4,0,.2,1)}
+    @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .m-handle{width:38px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px}
+    .m-crown{font-size:2.2rem;text-align:center;margin-bottom:6px}
+    .m-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;text-align:center;margin-bottom:5px}
+    .m-sub{color:var(--muted);font-size:.85rem;text-align:center;margin-bottom:22px;line-height:1.5}
+    .perks{display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+    .perk{display:flex;align-items:center;gap:11px;font-size:.86rem}
+    .pk-ic{font-size:1.05rem;width:26px;text-align:center;flex-shrink:0}
+    .pk-tx strong{color:var(--accent)}
+    .price-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:18px}
+    .pr-amt{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;color:var(--accent)}
+    .pr-per{color:var(--muted);font-size:.83rem}
+    .m-cta{width:100%;padding:16px;background:linear-gradient(135deg,var(--accent),#f8a030);color:#0a0a0f;border:none;border-radius:14px;font-family:'Syne',sans-serif;font-size:.98rem;font-weight:800;cursor:pointer;transition:all .2s;letter-spacing:.04em}
+    .m-cta:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(240,192,64,.28)}
+    .m-later{width:100%;padding:11px;background:transparent;color:var(--muted);border:none;font-family:'Outfit',sans-serif;font-size:.86rem;cursor:pointer;margin-top:9px;transition:color .2s}
+    .m-later:hover{color:var(--text)}
+    .podium{display:flex;align-items:flex-end;justify-content:center;gap:7px;margin:14px 0 22px}
+    .pod{display:flex;flex-direction:column;align-items:center;gap:5px}
+    .pod-cr{font-size:1.2rem}.pod-nm{font-family:'Syne',sans-serif;font-weight:700;font-size:.73rem;text-align:center;max-width:78px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .pod-pt{font-size:.68rem;color:var(--muted)}
+    .pod-bl{border-radius:10px 10px 0 0;width:78px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;color:#0a0a0f}
+    .p1 .pod-bl{background:linear-gradient(135deg,#f0c040,#f8a030);height:78px}
+    .p2 .pod-bl{background:linear-gradient(135deg,#c0c0c0,#a0a0a0);height:58px}
+    .p3 .pod-bl{background:linear-gradient(135deg,#cd7f32,#a0602a);height:46px}
+    .rwd-lock{text-align:center;padding:18px 14px;background:rgba(255,255,255,.03);border:1px dashed var(--border);border-radius:13px;margin:14px 0}
+    .rwd-lock-ic{font-size:1.9rem;margin-bottom:7px}
+    .rwd-lock-tx{font-size:.82rem;color:var(--muted);margin-bottom:11px}
+    .rwd-lock-btn{background:linear-gradient(135deg,var(--accent),#f8a030);color:#0a0a0f;border:none;border-radius:10px;padding:9px 18px;font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .2s}
+    .rwd-lock-btn:hover{transform:scale(1.05)}
+    .lv-bar2{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 15px;margin-bottom:13px}
+    .bdg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:18px}
+    .bdg-card{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:11px 6px;text-align:center;transition:all .2s}
+    .bdg-card.unl{border-color:rgba(240,192,64,.35);background:rgba(240,192,64,.06)}
+    .bdg-card.lk{opacity:.4;filter:grayscale(1)}
+    .bdg-em{font-size:1.5rem;display:block;margin-bottom:3px}
+    .bdg-nm{font-size:.62rem;color:var(--muted);font-weight:500;line-height:1.2}
+    .res-bonus{background:linear-gradient(135deg,rgba(240,192,64,.12),rgba(240,192,64,.04));border:1px solid rgba(240,192,64,.22);border-radius:13px;padding:13px;margin-bottom:18px;text-align:center}
+    .rb-tit{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--accent);margin-bottom:5px}
+    .rb-pts{font-family:'Syne',sans-serif;font-weight:800;font-size:1.45rem;color:var(--accent)}
+    .rb-bk{font-size:.73rem;color:var(--muted);margin-top:3px}
+    .notif{position:fixed;top:68px;right:14px;background:var(--card);border:1px solid var(--accent);border-radius:13px;padding:13px 15px;max-width:270px;z-index:900;box-shadow:0 8px 30px rgba(0,0,0,.4);display:none}
+    .notif.on{display:flex;gap:9px;align-items:flex-start;animation:nfi .4s cubic-bezier(.4,0,.2,1)}
+    @keyframes nfi{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
+    .nf-ic{font-size:1.1rem;flex-shrink:0}.nf-bd{flex:1}
+    .nf-tit{font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;margin-bottom:1px}
+    .nf-msg{font-size:.73rem;color:var(--muted);line-height:1.3}
+    .nf-cl{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.88rem;padding:0;flex-shrink:0}
+    /* lang-screen */
+    #ls{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+    #ls.off{display:none}
+    .ls-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(240,192,64,.09) 0%,transparent 65%),radial-gradient(ellipse 50% 60% at 80% 80%,rgba(74,184,200,.07) 0%,transparent 60%);pointer-events:none}
+    .ls-in{position:relative;z-index:1;width:100%;max-width:400px;text-align:center}
+    .ls-logo{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,8vw,3.4rem);font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:6px}
+    .ls-logo span:first-child{color:var(--accent)}.ls-logo span:last-child{color:var(--text)}
+    .ls-sub{font-size:.78rem;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-bottom:44px;font-weight:300}
+    .ls-ttl{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:600;color:var(--muted);margin-bottom:18px;letter-spacing:.05em}
+    .ls-btns{display:flex;flex-direction:column;gap:11px}
+    .ls-btn{display:flex;align-items:center;gap:15px;padding:17px 22px;background:var(--card);border:1.5px solid var(--border);border-radius:15px;cursor:pointer;transition:all .22s cubic-bezier(.4,0,.2,1);color:var(--text);font-family:'Outfit',sans-serif;width:100%;text-align:left;position:relative;overflow:hidden}
+    .ls-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,192,64,.06),transparent);opacity:0;transition:opacity .2s}
+    .ls-btn:hover{border-color:var(--accent);transform:translateX(5px) translateY(-1px);box-shadow:0 7px 26px rgba(240,192,64,.13)}
+    .ls-btn:hover::before{opacity:1}
+    .ls-fl{font-size:1.85rem;flex-shrink:0}.ls-bt{flex:1}
+    .ls-bn{font-family:'Syne',sans-serif;font-size:1.03rem;font-weight:700;display:block}
+    .ls-bs{font-size:.73rem;color:var(--muted);display:block;margin-top:1px}
+    .ls-ar{color:var(--muted);font-size:1.05rem;transition:transform .2s,color .2s}
+    .ls-btn:hover .ls-ar{transform:translateX(4px);color:var(--accent)}
+    .ls-ft{margin-top:32px;font-size:.7rem;color:var(--muted);opacity:.6}
+    .ls-dot{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--accent);margin:0 5px;vertical-align:middle}
+    /* lang badge */
+    #lang-badge{background:rgba(240,192,64,.12);border:1px solid rgba(240,192,64,.3);color:var(--accent);font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;padding:3px 11px;border-radius:20px;cursor:pointer;letter-spacing:.06em;transition:all .2s}
+    #lang-badge:hover{background:rgba(240,192,64,.2)}
+    /* ad zones */
+    .ad-zone{width:100%;text-align:center;background:rgba(255,255,255,.03);border-radius:8px;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(255,255,255,.07);color:var(--muted);font-size:.7rem}
+
+    /* ── PREMIUM UI ──────────────────────────────────────────────── */
+    .premium-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#f0c040,#e05c3a);color:#0a0a0f;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:20px;letter-spacing:.05em}
+    .free-badge{background:rgba(255,255,255,.08);color:var(--muted);font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid var(--border)}
+    .cbtn.premium-cat{border-color:rgba(240,192,64,.4);background:linear-gradient(135deg,rgba(240,192,64,.06),rgba(224,92,58,.04))}
+    .premium-upsell{background:linear-gradient(135deg,rgba(240,192,64,.1),rgba(224,92,58,.08));border:1.5px solid rgba(240,192,64,.3);border-radius:16px;padding:20px;margin-bottom:20px;text-align:center}
+    .premium-upsell h3{font-family:'Syne',sans-serif;color:var(--accent);font-size:1.1rem;margin-bottom:8px}
+    .premium-upsell p{color:var(--muted);font-size:.85rem;margin-bottom:14px;line-height:1.5}
+    .price-big{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)}
+    .btn-premium{padding:14px 24px;background:linear-gradient(135deg,#f0c040,#e8a020);color:#0a0a0f;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;transition:all .2s;width:100%;margin-top:8px}
+    .btn-premium:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(240,192,64,.3)}
+    .provider-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+    .pvdr{padding:9px 16px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text);font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s}
+    .pvdr:hover,.pvdr.on{border-color:var(--accent);color:var(--accent);background:rgba(240,192,64,.08)}
+    .limit-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-size:.83rem}
+    .limit-bar .lct{font-size:1.2rem}.limit-bar .ltxt{flex:1;color:var(--muted)}.limit-bar .lcnt{font-family:'Syne',sans-serif;font-weight:700;color:var(--accent3)}
+    .streak-disp{background:linear-gradient(135deg,rgba(224,92,58,.1),rgba(240,192,64,.05));border:1px solid rgba(224,92,58,.25);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:14px}
+    .streak-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent2)}
+    .level-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:14px}
+    .level-hdr{display:flex;justify-content:space-between;margin-bottom:8px}
+    .level-nm{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--accent)}
+    .level-pts{font-size:.75rem;color:var(--muted)}
+    .level-prog{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+    .level-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width 1s ease}
+    .badge-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+    .bdgi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:7px 11px;display:flex;align-items:center;gap:7px;font-size:.76rem}
+    .notif-bar{background:rgba(74,184,200,.08);border:1px solid rgba(74,184,200,.25);border-radius:12px;padding:11px 15px;margin-bottom:12px;font-size:.83rem;color:var(--accent3);display:flex;align-items:center;gap:9px;animation:fu .4s ease}
+    .notif-up{background:rgba(240,192,64,.08);border-color:rgba(240,192,64,.25);color:var(--accent)}
+    .daily-card{background:linear-gradient(135deg,rgba(74,184,200,.1),rgba(240,192,64,.06));border:1.5px solid rgba(74,184,200,.3);border-radius:14px;padding:16px;margin-bottom:18px}
+    .daily-card h4{font-family:'Syne',sans-serif;color:var(--accent3);font-size:.92rem;margin-bottom:5px}
+    .bonus-pop{position:fixed;top:80px;left:50%;transform:translateX(-50%) scale(.8);background:var(--card);border:1.5px solid var(--accent);border-radius:20px;padding:20px 28px;z-index:9000;text-align:center;opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);pointer-events:none;min-width:240px}
+    .bonus-pop.show{opacity:1;transform:translateX(-50%) scale(1)}
+    .bonus-pts{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--accent)}
+    .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:8000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
+    .modal-bx{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:26px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
+    .modal-bx h2{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:800;margin-bottom:6px}
+    .modal-close{float:right;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
+    .ph-inp{width:100%;padding:13px 15px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:1rem;outline:none;margin:10px 0;transition:border-color .2s}
+    .ph-inp:focus{border-color:var(--accent)}
+    @media(max-width:480px){.cgrid{grid-template-columns:repeat(2,1fr)}.sg{grid-template-columns:repeat(3,1fr)}.bdg-grid{grid-template-columns:repeat(3,1fr)}}
+    /* ── LANGUAGE SELECTION SCREEN ─────────────────────────── */
+    #lang-screen{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;animation:ls-in .5s ease}
+    #lang-screen.hidden{animation:ls-out .4s ease forwards}
+    @keyframes ls-in{from{opacity:0}to{opacity:1}}
+    @keyframes ls-out{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(1.04)}}
+    .ls-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(240,192,64,.09) 0%,transparent 65%),radial-gradient(ellipse 50% 60% at 80% 80%,rgba(74,184,200,.07) 0%,transparent 60%);pointer-events:none}
+    .ls-inner{position:relative;z-index:1;width:100%;max-width:400px;text-align:center}
+    .ls-logo{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,8vw,3.6rem);font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:8px}
+    .ls-logo span:first-child{color:var(--accent)}.ls-logo span:last-child{color:var(--text)}
+    .ls-sub{font-size:.8rem;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-bottom:48px;font-weight:300}
+    .ls-title{font-family:'Syne',sans-serif;font-size:clamp(.88rem,2.5vw,1rem);font-weight:600;color:var(--muted);margin-bottom:20px;letter-spacing:.06em}
+    .ls-btns{display:flex;flex-direction:column;gap:12px}
+    .ls-btn{display:flex;align-items:center;gap:16px;padding:18px 24px;background:var(--card);border:1.5px solid var(--border);border-radius:16px;cursor:pointer;transition:all .22s cubic-bezier(.4,0,.2,1);color:var(--text);font-family:'Outfit',sans-serif;width:100%;text-align:left;position:relative;overflow:hidden}
+    .ls-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,192,64,.06),transparent);opacity:0;transition:opacity .2s}
+    .ls-btn:hover{border-color:var(--accent);transform:translateX(6px) translateY(-1px);box-shadow:0 8px 28px rgba(240,192,64,.14)}
+    .ls-btn:hover::before{opacity:1}
+    .ls-btn:active{transform:translateX(3px) translateY(0)}
+    .ls-flag{font-size:1.9rem;flex-shrink:0}
+    .ls-btn-text{flex:1}
+    .ls-btn-name{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;display:block}
+    .ls-btn-sub{font-size:.75rem;color:var(--muted);display:block;margin-top:2px}
+    .ls-arr{color:var(--muted);font-size:1.1rem;transition:transform .2s, color .2s}
+    .ls-btn:hover .ls-arr{transform:translateX(4px);color:var(--accent)}
+    .ls-footer{margin-top:36px;font-size:.72rem;color:var(--muted);opacity:.6}
+    .ls-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin:0 6px;vertical-align:middle}
+  </style>
+</head>
+<body>
+<!-- LANGUAGE SELECTION SCREEN -->
+<div id="ls">
+  <div class="ls-bg"></div>
+  <div class="ls-in">
+    <div class="ls-logo"><span id="ls-w1">KONKOU</span> <span id="ls-w2">KONESANS</span></div>
+    <p class="ls-sub" id="ls-subtitle">World Trivia Challenge</p>
+    <p class="ls-ttl">Choose your language / Choisissez votre langue</p>
+    <div class="ls-btns">
+      <button class="ls-btn" onclick="_pick('en')">
+        <span class="ls-fl">🇺🇸</span>
+        <span class="ls-bt"><span class="ls-bn">English</span><span class="ls-bs">10 categories · 3 difficulty levels</span></span>
+        <span class="ls-ar">›</span>
+      </button>
+      <button class="ls-btn" onclick="_pick('fr')">
+        <span class="ls-fl">🇫🇷</span>
+        <span class="ls-bt"><span class="ls-bn">Français</span><span class="ls-bs">10 catégories · 3 niveaux de difficulté</span></span>
+        <span class="ls-ar">›</span>
+      </button>
+      <button class="ls-btn" onclick="_pick('ht')">
+        <span class="ls-fl">🇭🇹</span>
+        <span class="ls-bt"><span class="ls-bn">Kreyòl Ayisyen</span><span class="ls-bs">10 kategori · 3 nivo difikilte</span></span>
+        <span class="ls-ar">›</span>
+      </button>
+    </div>
+    <p class="ls-ft"><span class="ls-dot"></span>Kreye pa <strong style="color:var(--accent)">Septa</strong><span class="ls-dot"></span></p>
+  </div>
+</div>
+
+<!-- CREATOR BAR -->
+<div class="cb">
+  <div class="cb-l">
+    <div class="cb-av"><img src="https://ui-avatars.com/api/?name=Septa&background=f0c040&color=0a0a0f&bold=true&size=56" alt="Septa"/></div>
+    <span data-t="by"> Kreye pa </span><span class="cb-cn">Septa</span>
+  </div>
+  <button id="lang-badge" onclick="_changeLang()">🇭🇹 Kreyòl</button>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="logo"><span id="app-w1">KONKOU</span> <span id="app-w2">KONESANS</span></div>
+    <p class="tagline" id="app-tagline">Teste konesans ou sou tout sijè</p>
+  </header>
+
+  <!-- HOME -->
+  <div id="s0" class="sc on">
+    <!-- AD TOP — AdSense 320x50 -->
+    <div class="ad-zone" id="ad-top" style="min-height:48px;margin-bottom:12px"><!-- ADSENSE TOP --></div>
+
+    <!-- USER BAR -->
+    <div class="usr-bar" id="usr-bar">
+      <div class="usr-info">
+        <div class="usr-av" id="usr-av">?</div>
+        <div>
+          <div class="usr-name" id="usr-nm">—</div>
+          <div class="usr-lv" id="usr-lv">Nivo 1</div>
+        </div>
+      </div>
+      <div class="usr-right">
+        <div><span class="pts-disp" id="usr-pts">0</span> <span class="pts-lbl">pts</span></div>
+        <span id="usr-ptag" class="ptag-f">FREE</span>
+      </div>
+    </div>
+
+    <!-- STREAK BAR -->
+    <div class="streak-bar">
+      <span class="sk-fire">🔥</span>
+      <span class="sk-cnt" id="sk-cnt">0</span>
+      <span class="sk-txt" id="sk-txt">jou konsekitif</span>
+      <button class="sk-btn" id="sk-btn" onclick="_claimStreak()">+50 pts</button>
+    </div>
+
+    <!-- DAILY CHALLENGE -->
+    <div class="daily-card" id="dc-card" onclick="_startDaily()">
+      <span class="dc-icon">⚡</span>
+      <div class="dc-info">
+        <div class="dc-title" id="dc-title">Defi Jounen an</div>
+        <div class="dc-sub" id="dc-sub">Syans · Difisil</div>
+      </div>
+      <div class="dc-pts" id="dc-pts">+200 pts</div>
+    </div>
+
+    <!-- LEVEL BAR -->
+    <div class="lv-bar">
+      <div class="lv-head">
+        <span class="lv-name" id="lv-name">⭐ Debutant</span>
+        <span class="lv-next" id="lv-next">250 pts pou nivo 2</span>
+      </div>
+      <div class="lv-track"><div class="lv-fill" id="lv-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- FREE LIMIT (kache si premium) -->
+    <div class="lim-bar" id="lim-bar">
+      <span style="font-size:.95rem">🎮</span>
+      <span class="lim-txt" id="lim-txt">Pati gratis rete jounen an:</span>
+      <span class="lim-cnt" id="lim-cnt">5/5</span>
+      <button class="lim-up" onclick="_showPrem()">✨ Premium</button>
+    </div>
+
+    <!-- TABS -->
+    <div class="ntabs" style="overflow-x:auto;flex-wrap:nowrap">
+      <button class="ntab on"  onclick="_tab('p')" id="nt0" style="white-space:nowrap">🎮 Jwe</button>
+      <button class="ntab"     onclick="_tab('l')" id="nt1" style="white-space:nowrap">🏆 Klasman</button>
+      <button class="ntab"     onclick="_tab('m')" id="nt2" style="white-space:nowrap">🥇 Mwa</button>
+      <button class="ntab"     onclick="_tab('b')" id="nt3" style="white-space:nowrap">🎖 Badges</button>
+    </div>
+
+    <!-- PLAY TAB -->
+    <div id="pTab">
+      <div class="nw">
+        <label id="lbl-name">Non ou</label>
+        <input type="text" class="ni" id="pName" maxlength="30" placeholder="Ekri non ou..."/>
+      </div>
+      <p class="stit" id="lbl-pickcat">Chwazi yon Kategori</p>
+      <div class="cgrid" id="cg"></div>
+      <p class="stit" id="lbl-pickdiff">Nivo Difikilte</p>
+      <div class="drow">
+        <button class="dbtn on" data-d="easy"   onclick="_dd(this)" id="dbtn-e">Fasil</button>
+        <button class="dbtn"    data-d="medium" onclick="_dd(this)" id="dbtn-m">Mwayen</button>
+        <button class="dbtn"    data-d="hard"   onclick="_dd(this)" id="dbtn-h">Difisil</button>
+      </div>
+      <button class="bp" onclick="_go()" id="btn-start">Kòmanse Jwèt →</button>
+    </div>
+
+    <!-- LEADERBOARD TAB -->
+    <div id="lTab" style="display:none">
+      <p class="stit" id="lbl-lb">🌍 Top Jwè Mondyal</p>
+      <button class="rfb" onclick="_rl()" id="btn-rl">↻ Rafraîchi</button>
+      <div class="lbl" id="lb"><div class="lem">Chajman...</div></div>
+    </div>
+
+    <!-- MONTHLY TAB -->
+    <div id="mTab" style="display:none">
+      <div id="prize-banner" style="background:linear-gradient(135deg,rgba(240,192,64,.14),rgba(224,92,58,.09));border:1px solid rgba(240,192,64,.28);border-radius:14px;padding:15px;margin-bottom:16px;text-align:center">
+        <div style="font-size:1.35rem;margin-bottom:3px">🏆</div>
+        <div style="font-family:Syne,sans-serif;font-weight:700;color:var(--accent);font-size:.98rem" id="prize-title">Pi bon jwè mwa a</div>
+        <div style="color:var(--muted);font-size:.8rem;margin-top:5px" id="prize-countdown"></div>
+        <div style="margin-top:9px;font-size:.78rem;color:var(--muted)" id="cur-leader"></div>
+      </div>
+      <!-- PODIUM -->
+      <div class="podium">
+        <div class="pod p2"><div class="pod-cr">🥈</div><div class="pod-bl">2</div><div class="pod-nm" id="pod2-n">—</div><div class="pod-pt" id="pod2-p">0 pts</div></div>
+        <div class="pod p1"><div class="pod-cr">🥇</div><div class="pod-bl">1</div><div class="pod-nm" id="pod1-n">—</div><div class="pod-pt" id="pod1-p">0 pts</div></div>
+        <div class="pod p3"><div class="pod-cr">🥉</div><div class="pod-bl">3</div><div class="pod-nm" id="pod3-n">—</div><div class="pod-pt" id="pod3-p">0 pts</div></div>
+      </div>
+      <!-- REWARD LOCKED -->
+      <div class="rwd-lock" id="rwd-lock">
+        <div class="rwd-lock-ic">🔒</div>
+        <div style="font-family:Syne,sans-serif;font-weight:700;margin-bottom:4px" id="rwd-lock-t">Rekonpans rezève pou Premium</div>
+        <div class="rwd-lock-tx" id="rwd-lock-s">Top 3 Premium: kredi mobil, lajan, kado. Chak mwa.</div>
+        <button class="rwd-lock-btn" onclick="_showPrem()" id="rwd-lock-btn">✨ Pase Premium</button>
+      </div>
+      <p class="stit" id="lbl-mtop" style="margin-top:14px">🌍 Top 10 — Mwa Sa A</p>
+      <button class="rfb" onclick="_rm();_rw()" id="btn-rm">↻ Rafraîchi</button>
+      <div class="lbl" id="mlb"><div class="lem">Chajman...</div></div>
+      <div class="ad-zone" id="ad-monthly" style="min-height:90px;margin-top:14px"><!-- ADSENSE MONTHLY --></div>
+    </div>
+
+    <!-- BADGES TAB -->
+    <div id="bTab" style="display:none">
+      <p class="stit" id="lbl-badges">🎖 Badges &amp; Nivo</p>
+      <div class="bdg-grid" id="bdg-grid"></div>
+      <p class="stit" id="lbl-stats" style="margin-top:6px">📊 Estatistik</p>
+      <div class="sg">
+        <div class="sb2"><span class="sv" id="st-games">0</span><div class="sk" id="st-lbl-g">Pati</div></div>
+        <div class="sb2"><span class="sv" id="st-corr" style="color:var(--correct)">0</span><div class="sk" id="st-lbl-c">Bon Rep.</div></div>
+        <div class="sb2"><span class="sv" id="st-streak" style="color:var(--accent)">0</span><div class="sk" id="st-lbl-s">Meye Seri</div></div>
+      </div>
+    </div>
+  </div>
+
+<!-- QUIZ -->
+  <div id="s1" class="sc">
+    <div class="qh">
+      <div class="qi"><span data-t="question">Kesyon</span> <span id="qn">1</span>/<span id="qt">20</span></div>
+      <div class="pb"><div class="pf" id="pf"></div></div>
+      <div class="sb">⭐ <span id="qs">0</span></div>
+    </div>
+    <div class="tw">
+      <div class="tr">
+        <svg width="60" height="60" viewBox="0 0 60 60">
+          <circle class="bg" cx="30" cy="30" r="26"/>
+          <circle class="tp" id="tc" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="0"/>
+        </svg>
+        <div class="tn" id="tn">20</div>
+      </div>
+    </div>
+    <div class="qcard">
+      <div class="qm"><span class="ct" id="qcat"></span><span id="qdf"></span></div>
+      <p class="qt" id="qtxt">...</p>
+    </div>
+    <div class="ol" id="olist"></div>
+    <div class="fb" id="fb"></div>
+    <!-- Auto-advance bar -->
+    <div class="abar" id="abar"><div class="afill" id="afill"></div></div>
+  </div>
+
+  
+
+<!-- RESULTS -->
+  <div id="s2" class="sc">
+    <div class="rw">
+      <div class="rring">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle class="bg" cx="75" cy="75" r="65"/>
+          <circle class="pg" id="rc" cx="75" cy="75" r="65" stroke-dasharray="408.4" stroke-dashoffset="408.4"/>
+        </svg>
+        <div class="rctr">
+          <span class="rpct" id="rpct">0%</span>
+          <span class="rlb" data-t="score">Nòt</span>
+        </div>
+      </div>
+      <div class="rtit" id="rtit">Bravo!</div>
+      <p class="rsub" id="rsub"></p>
+      <!-- BONUS POINTS -->
+      <div class="res-bonus" id="res-bonus" style="display:none">
+        <div class="rb-tit" id="rb-tit">⭐ Pwen Ganye</div>
+        <div class="rb-pts" id="rb-pts">+0 pts</div>
+        <div class="rb-bk" id="rb-bk">Bon repons + bonus vitès + streak</div>
+      </div>
+      <!-- AD ZONE RESULTS — AdSense 300x100 ici -->
+      <div class="ad-zone" id="ad-results" style="min-height:70px;margin-bottom:18px"><!-- ADSENSE RESULTS --></div>
+      <div class="sg">
+        <div class="sb2"><span class="sv" id="scor">0</span><div class="sk" id="sk-correct" data-t="correct">✅ Bon</div></div>
+        <div class="sb2"><span class="sv" id="swrg">0</span><div class="sk" id="sk-wrong" data-t="wrong">❌ Mal</div></div>
+        <div class="sb2"><span class="sv" id="stim">0s</span><div class="sk" id="sk-time" data-t="time">⏱ Tan</div></div>
+      </div>
+
+</div>
+
+<!-- PREMIUM MODAL -->
+<div class="modal-ov off" id="prem-modal" onclick="_closePremOuter(event)">
+  <div class="modal-box">
+    <div class="m-handle"></div>
+    <div class="m-crown">👑</div>
+    <div class="m-title" id="m-title">Deblouke Premium</div>
+    <div class="m-sub" id="m-sub">Jwenn aksè konplè, batay pou rekonpans chak mwa, epi jwe san limit.</div>
+    <div class="perks">
+      <div class="perk"><span class="pk-ic">♾️</span><span class="pk-tx" id="pk1">Pati <strong>ilimite</strong> chak jou</span></div>
+      <div class="perk"><span class="pk-ic">🏆</span><span class="pk-tx" id="pk2">Patisipe nan <strong>rekonpans mansyèl</strong></span></div>
+      <div class="perk"><span class="pk-ic">⚡</span><span class="pk-tx" id="pk3">Aksè a <strong>quiz eksklizif</strong></span></div>
+      <div class="perk"><span class="pk-ic">🎯</span><span class="pk-tx" id="pk4"><strong>Defi espesyal</strong> chak semèn</span></div>
+      <div class="perk"><span class="pk-ic">🚫</span><span class="pk-tx" id="pk5"><strong>San piblisite</strong></span></div>
+    </div>
+    <div class="price-row"><span class="pr-amt">$2.99</span><span class="pr-per" id="m-per">/ mwa</span></div>
+    <button class="m-cta" id="m-cta" onclick="_doPrem()">✨ Pase Premium Kounye a</button>
+    <button class="m-later" id="m-later" onclick="_hidePrem()">Pita</button>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif">
+  <span class="nf-ic" id="nf-ic">🔔</span>
+  <div class="nf-bd"><div class="nf-tit" id="nf-tit"></div><div class="nf-msg" id="nf-msg"></div></div>
+  <button class="nf-cl" onclick="_hideNotif()">✕</button>
+</div>
+
+<div class="toast" id="tst"></div>
+
+
+<script>
+// ╔══════════════════════════════════════════════════════════════════╗
+// ║  KONKOU KONESANS — Complete App JS                               ║
+// ║  Langue · Quiz · Gamification · Premium · Anti-cheat             ║
+// ╚══════════════════════════════════════════════════════════════════╝
+
+// ── APP CONFIG ────────────────────────────────────────────────────
+// ┌─────────────────────────────────────────────────────────────────┐
+// │  CHANJE NON APP LA ICI — touche sèlman blòk sa a               │
+// │  word1 = premye mo (koulè or)                                  │
+// │  word2 = dezyèm mo (koulè blan)                                │
+// └─────────────────────────────────────────────────────────────────┘
+const _APP = {
+  word1:    'KONKOU',
+  word2:    'KONESANS',
+  fullname: 'Konkou Konesans',
+  subtitle: 'World Trivia Challenge',
+};
+
+// ── CATEGORIES ────────────────────────────────────────────────────
+const _C=[
+  {i:'geo',e:'🌍'},{i:'sci',e:'🔬'},{i:'hist',e:'📜'},{i:'sport',e:'⚽'},
+  {i:'tech',e:'💻'},{i:'art',e:'🎨'},{i:'math',e:'➕'},{i:'food',e:'🍽️'},
+  {i:'animals',e:'🐘'},{i:'haiti',e:'🇭🇹'},
+];
+
+// ── TRANSLATIONS ──────────────────────────────────────────────────
+const _T={
+  ht:{
+    by:'Kreye pa',tagline:'Teste konesans ou sou tout sijè',
+    play:'🎮 Jwe',rank:'🏆 Klasman',month_tab:'🥇 Mwa',
+    yourname:'Non ou',namepl:'Ekri non ou...',
+    pickcat:'Chwazi yon Kategori',pickdiff:'Nivo Difikilte',
+    easy:'Fasil',medium:'Mwayen',hard:'Difisil',
+    start:'Kòmanse Jwèt →',topplayers:'🌍 Top Jwè Mondyal',
+    refresh:'↻ Rafraîchi',loading:'Chajman...',question:'Kesyon',
+    score:'Nòt',correct:'✅ Bon',wrong:'❌ Mal',time:'⏱ Tan',
+    playagain:'🔄 Jwe Ankò',backhome:'← Retounen Lakay',
+    noname:'Tanpri ekri non ou!',nocat:'Chwazi yon kategori!',
+    connerr:'Erè koneksyon. Eseye ankò.',timesup:'Tan ou fini! ⏰',
+    excellent:'Ekselan!',pts:'pwen',correct_ans:'Repons kòrèk:',
+    genius:'🏆 Jeni!',genius_s:'Ou ekselan! Pa gen moun ki ka bat ou.',
+    bravo:'🌟 Bravo!',bravo_s:'Ou fè yon trè bon pèfòmans!',
+    notbad:'👍 Pa mal!',notbad_s:'Kontinye pratike, ou pral vin miyò.',
+    learn:'📚 Aprann!',learn_s:'Pa dekouraje, lekti ap ede ou.',
+    lbempty:'Pa gen ankò jwè. Kòmanse jwe!',lberr:'Pa ka chaje klasman.',
+    prize_title:'Pi bon jwè mwa a',monthly_top:'🌍 Top 10 — Mwa Sa A',
+    page_title:'Jwèt Quiz Gratis',
+    cats:{geo:'Jewografi',sci:'Syans',hist:'Istwa',sport:'Espò',tech:'Teknoloji',art:'Kiltirèl',math:'Matematik',food:'Manje',animals:'Bèt',haiti:'Ayiti'},
+    diffs:{easy:'Fasil',medium:'Mwayen',hard:'Difisil'},
+    badges_lbl:'🎖 Badges & Nivo',stats_lbl:'📊 Estatistik',
+    games_lbl:'Pati',correct_lbl:'Bon Rep.',streak_lbl:'Meye Seri',
+    streak_txt:'jou konsekitif',daily_title:'Defi Jounen an',daily_done:'Defi fini! ✓',
+    limit_txt:'Pati gratis rete jounen an:',lvl_next:'pts pou nivo pwochèn',
+    top3_msg:'Ou pre top 3!',go_prem:'Pase Premium pou rekonpans.',
+    daily_limit:'Limit jounen an!',daily_limit_sub:'Pase Premium pou jwe san limit.',
+    prem_now:'Ou se Premium kounye a!',prem_now_sub:'Felisitasyon! 30 jou aktif.',
+    rwd_title:'Rekonpans rezève pou Premium',rwd_sub:'Top 3 Premium: kredi mobil, lajan, kado. Chak mwa.',
+    rwd_btn:'✨ Pase Premium',unlock:'✨ Deblouke',
+    streak_bonus:'Streak Bonus!',new_badge:'Nouvo Badge!',
+    m_title:'Deblouke Premium',m_sub:'Jwenn aksè konplè, batay pou rekonpans chak mwa, epi jwe san limit.',
+    m_per:'/ mwa',m_cta:'✨ Pase Premium Kounye a',m_later:'Pita',
+    pk1:'Pati <strong>ilimite</strong> chak jou',
+    pk2:'Patisipe nan <strong>rekonpans mansyèl</strong>',
+    pk3:'Aksè a <strong>quiz eksklizif</strong>',
+    pk4:'<strong>Defi espesyal</strong> chak semèn',
+    pk5:'<strong>San piblisite</strong>',
+    lvls:['⭐ Debutant','🌟 Apranan','💡 Kwayan','🎯 Ekspè','🔥 Chanpyon','👑 Lejann','🏆 Mèt Quiz'],
+    days_left:'jou rete nan mwa a',leader_now:'Lidè kounye a:',no_leader:'Pa gen lidè encore — ou ka premye!',
+  },
+  fr:{
+    by:'Créé par',tagline:'Testez vos connaissances sur tous les sujets',
+    play:'🎮 Jouer',rank:'🏆 Classement',month_tab:'🥇 Mois',
+    yourname:'Votre nom',namepl:'Entrez votre nom...',
+    pickcat:'Choisir une Catégorie',pickdiff:'Niveau de Difficulté',
+    easy:'Facile',medium:'Moyen',hard:'Difficile',
+    start:'Commencer →',topplayers:'🌍 Top Joueurs Mondiaux',
+    refresh:'↻ Actualiser',loading:'Chargement...',question:'Question',
+    score:'Score',correct:'✅ Correct',wrong:'❌ Faux',time:'⏱ Temps',
+    playagain:'🔄 Rejouer',backhome:'← Retour Accueil',
+    noname:'Veuillez entrer votre nom!',nocat:'Choisissez une catégorie!',
+    connerr:'Erreur de connexion. Réessayez.',timesup:'Temps écoulé! ⏰',
+    excellent:'Excellent!',pts:'pts',correct_ans:'Bonne réponse:',
+    genius:'🏆 Génie!',genius_s:'Vous êtes excellent! Personne ne peut vous battre.',
+    bravo:'🌟 Bravo!',bravo_s:'Vous avez fait une excellente performance!',
+    notbad:'👍 Pas mal!',notbad_s:'Continuez à pratiquer, vous vous améliorerez.',
+    learn:'📚 Apprenez!',learn_s:'Ne vous découragez pas, la lecture va vous aider.',
+    lbempty:'Aucun joueur encore. Commencez à jouer!',lberr:'Impossible de charger le classement.',
+    prize_title:'Meilleur joueur du mois',monthly_top:'🌍 Top 10 — Ce Mois-ci',
+    page_title:'Jeu Quiz Gratuit',
+    cats:{geo:'Géographie',sci:'Sciences',hist:'Histoire',sport:'Sport',tech:'Technologie',art:'Culture',math:'Mathématiques',food:'Cuisine',animals:'Animaux',haiti:'Haïti'},
+    diffs:{easy:'Facile',medium:'Moyen',hard:'Difficile'},
+    badges_lbl:'🎖 Badges & Niveaux',stats_lbl:'📊 Statistiques',
+    games_lbl:'Parties',correct_lbl:'Bonnes Rép.',streak_lbl:'Meilleure Série',
+    streak_txt:'jours consécutifs',daily_title:'Défi du Jour',daily_done:'Défi terminé! ✓',
+    limit_txt:'Parties gratuites restantes:',lvl_next:'pts pour niveau suivant',
+    top3_msg:'Vous approchez du top 3!',go_prem:'Passez Premium pour les récompenses.',
+    daily_limit:'Limite journalière!',daily_limit_sub:'Passez Premium pour jouer sans limite.',
+    prem_now:'Vous êtes Premium!',prem_now_sub:'Félicitations! 30 jours actifs.',
+    rwd_title:'Récompenses réservées aux Premium',rwd_sub:'Top 3 Premium: crédit mobile, argent, cadeaux chaque mois.',
+    rwd_btn:'✨ Passer Premium',unlock:'✨ Débloquer',
+    streak_bonus:'Bonus Streak!',new_badge:'Nouveau Badge!',
+    m_title:'Passer Premium',m_sub:'Accès illimité, récompenses mensuelles, sans publicité.',
+    m_per:'/ mois',m_cta:'✨ Passer Premium Maintenant',m_later:'Plus tard',
+    pk1:'Parties <strong>illimitées</strong> chaque jour',
+    pk2:'Participer aux <strong>récompenses mensuelles</strong>',
+    pk3:'Accès aux <strong>quiz exclusifs</strong>',
+    pk4:'<strong>Défis spéciaux</strong> chaque semaine',
+    pk5:'<strong>Sans publicité</strong>',
+    lvls:['⭐ Débutant','🌟 Apprenti','💡 Savant','🎯 Expert','🔥 Champion','👑 Légende','🏆 Maître Quiz'],
+    days_left:'jours restants ce mois',leader_now:'Leader actuel:',no_leader:"Pas encore de leader — c'est votre chance!",
+  },
+  en:{
+    by:'Created by',tagline:'Test your knowledge on all subjects',
+    play:'🎮 Play',rank:'🏆 Leaderboard',month_tab:'🥇 Month',
+    yourname:'Your name',namepl:'Enter your name...',
+    pickcat:'Choose a Category',pickdiff:'Difficulty Level',
+    easy:'Easy',medium:'Medium',hard:'Hard',
+    start:'Start Game →',topplayers:'🌍 Top Global Players',
+    refresh:'↻ Refresh',loading:'Loading...',question:'Question',
+    score:'Score',correct:'✅ Correct',wrong:'❌ Wrong',time:'⏱ Time',
+    playagain:'🔄 Play Again',backhome:'← Back Home',
+    noname:'Please enter your name!',nocat:'Choose a category!',
+    connerr:'Connection error. Try again.',timesup:"Time's up! ⏰",
+    excellent:'Excellent!',pts:'pts',correct_ans:'Correct answer:',
+    genius:'🏆 Genius!',genius_s:"You're excellent! Nobody can beat you.",
+    bravo:'🌟 Bravo!',bravo_s:'You had an excellent performance!',
+    notbad:'👍 Not bad!',notbad_s:"Keep practicing, you'll keep improving.",
+    learn:'📚 Keep learning!',learn_s:"Don't be discouraged, reading will help.",
+    lbempty:'No players yet. Start playing!',lberr:'Cannot load leaderboard.',
+    prize_title:'Best player of the month',monthly_top:'🌍 Top 10 — This Month',
+    page_title:'Free Quiz Game',
+    cats:{geo:'Geography',sci:'Science',hist:'History',sport:'Sports',tech:'Technology',art:'Culture',math:'Mathematics',food:'Food',animals:'Animals',haiti:'Haiti'},
+    diffs:{easy:'Easy',medium:'Medium',hard:'Hard'},
+    badges_lbl:'🎖 Badges & Levels',stats_lbl:'📊 Statistics',
+    games_lbl:'Games',correct_lbl:'Correct',streak_lbl:'Best Streak',
+    streak_txt:'day streak',daily_title:"Today's Challenge",daily_done:'Challenge done! ✓',
+    limit_txt:'Free games left today:',lvl_next:'pts for next level',
+    top3_msg:'You are near the top 3!',go_prem:'Go Premium for rewards.',
+    daily_limit:'Daily limit reached!',daily_limit_sub:'Go Premium for unlimited play.',
+    prem_now:"You're now Premium!",prem_now_sub:'Congrats! 30 days active.',
+    rwd_title:'Rewards for Premium Members',rwd_sub:'Top 3 Premium: mobile credit, cash, gifts every month.',
+    rwd_btn:'✨ Go Premium',unlock:'✨ Unlock',
+    streak_bonus:'Streak Bonus!',new_badge:'New Badge!',
+    m_title:'Unlock Premium',m_sub:'Full access, monthly rewards, no ads.',
+    m_per:'/ month',m_cta:'✨ Go Premium Now',m_later:'Later',
+    pk1:'<strong>Unlimited</strong> games per day',
+    pk2:'Participate in <strong>monthly rewards</strong>',
+    pk3:'Access to <strong>exclusive quizzes</strong>',
+    pk4:'<strong>Special challenges</strong> weekly',
+    pk5:'<strong>No ads</strong>',
+    lvls:['⭐ Beginner','🌟 Apprentice','💡 Scholar','🎯 Expert','🔥 Champion','👑 Legend','🏆 Quiz Master'],
+    days_left:'days left this month',leader_now:'Current leader:',no_leader:"No leader yet — you could be first!",
+  }
+};
+
+// ── STATE ─────────────────────────────────────────────────────────
+let _L = 'ht';
+let _x = {cat:null,dif:'easy',tok:null,tot:0,scr:0,ok:0,ko:0,t0:0,ti:null,tl:0,ans:false,nq:null,nn:0,nt:0,done:false,isDaily:false,dailyBonus:0};
+
+// ── STORAGE KEYS ──────────────────────────────────────────────────
+const _LK='kk_lang', _PK='kk_prem', _UK='kk_user', _DK='kk_daily', _SK='kk_streak', _STK='kk_stats';
+const _FREE_MAX = 5;
+
+// ── LEVELS & BADGES ───────────────────────────────────────────────
+const _LVL_PTS = [0,250,750,1500,3000,6000,12000];
+const _BADGES = [
+  {id:'first',    e:'🎮', n:{ht:'Premye Pati',   fr:'1ère Partie',     en:'First Game'},    c:s=>s.g>=1},
+  {id:'c10',      e:'✅', n:{ht:'10 Bon Rep.',    fr:'10 Bonnes Rép.',  en:'10 Correct'},    c:s=>s.tc>=10},
+  {id:'sk3',      e:'🔥', n:{ht:'3 Jou Seri',    fr:'3 Jours Streak',  en:'3-Day Streak'},  c:s=>s.bs>=3},
+  {id:'speed',    e:'⚡', n:{ht:'Rapid!',         fr:'Rapide!',          en:'Speed Demon!'},  c:s=>s.fa>=5},
+  {id:'sch',      e:'📚', n:{ht:'Etidyan',        fr:'Étudiant',         en:'Scholar'},       c:s=>s.g>=10},
+  {id:'perf',     e:'💯', n:{ht:'Pafè!',          fr:'Parfait!',         en:'Perfect!'},      c:s=>s.pg>=1},
+  {id:'sk7',      e:'🌟', n:{ht:'7 Jou Seri',    fr:'7 Jours Streak',  en:'7-Day Streak'},  c:s=>s.bs>=7},
+  {id:'vet',      e:'🏅', n:{ht:'Veteran',        fr:'Vétéran',          en:'Veteran'},       c:s=>s.g>=50},
+  {id:'champ',    e:'🏆', n:{ht:'Chanpyon',       fr:'Champion',         en:'Champion'},      c:s=>s.tp>=3000},
+  {id:'prem',     e:'👑', n:{ht:'Premium',        fr:'Premium',          en:'Premium'},       c:s=>s.ip},
+  {id:'d5',       e:'⚡', n:{ht:'5 Defi',         fr:'5 Défis',          en:'5 Challenges'},  c:s=>s.dd>=5},
+  {id:'leg',      e:'🌈', n:{ht:'Lejann',         fr:'Légende',          en:'Legend'},        c:s=>s.tp>=12000},
+];
+const _DAILY_POOL=[
+  {cat:'sci', diff:'hard',   pts:200},{cat:'hist',diff:'medium',pts:150},
+  {cat:'math',diff:'hard',   pts:200},{cat:'geo', diff:'medium',pts:150},
+  {cat:'tech',diff:'hard',   pts:200},{cat:'haiti',diff:'medium',pts:150},
+  {cat:'sport',diff:'easy',  pts:100},
+];
+
+// ── ANTI-CHEAT ────────────────────────────────────────────────────
+let _ac = {ts:0, tabHide:0, suspicious:false};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&!_x.ans)_ac.tabHide++});
+function _acStart(){_ac.ts=Date.now();}
+function _acOk(){return Date.now()-_ac.ts >= 400;}
+
+// ── STORAGE HELPERS ───────────────────────────────────────────────
+function _ls(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');localStorage.setItem(k,JSON.stringify(v));}catch(e){return null;}}
+function _isPrem(){try{const d=_ls(_PK)||{};return d.active===true&&(!d.exp||new Date(d.exp)>new Date());}catch{return false;}}
+function _stats(){return _ls(_STK)||{g:0,tc:0,tp:0,bs:0,fa:0,pg:0,dd:0,ip:false,bdg:[],gpd:0,lpd:''};}
+function _sStats(s){_ls(_STK,s);}
+function _streak(){return _ls(_SK)||{count:0,lastDate:'',lastClaim:''};}
+function _sStreak(s){_ls(_SK,s);}
+
+// ── TRANSLATION HELPER ────────────────────────────────────────────
+function _t(k){return (_T[_L]||_T.ht)[k]||(_T.ht)[k]||k;}
+function _e(s){return String(s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));}
+function _$(id){return document.getElementById(id);}
+function _set(id,v){const e=_$(id);if(e)e.textContent=v;}
+function _html(id,v){const e=_$(id);if(e)e.innerHTML=v;}
+
+// ── UPDATE ALL UI TEXT ────────────────────────────────────────────
+function _ut(){
+  const t=_T[_L];
+  document.documentElement.lang=_L;
+  document.title=_APP.fullname+' – '+t.page_title;
+  // Logo
+  _set('app-w1',_APP.word1); _set('app-w2',_APP.word2);
+  _set('ls-w1',_APP.word1);  _set('ls-w2',_APP.word2);
+  _set('app-tagline',t.tagline); _set('ls-subtitle',_APP.subtitle);
+  // Creator bar
+  const byEl=document.querySelector('[data-t="by"]'); if(byEl) byEl.textContent=' '+t.by+' ';
+  // Tabs
+  _set('nt0',t.play); _set('nt1',t.rank); _set('nt2',t.month_tab);
+  // Play tab
+  const lbn=_$('lbl-name'); if(lbn) lbn.textContent=t.yourname;
+  const ni=_$('pName'); if(ni) ni.placeholder=t.namepl;
+  _set('lbl-pickcat',t.pickcat); _set('lbl-pickdiff',t.pickdiff);
+  _set('dbtn-e',t.easy); _set('dbtn-m',t.medium); _set('dbtn-h',t.hard);
+  _set('btn-start',t.start);
+  // Leaderboard
+  _set('lbl-lb',t.topplayers); _set('btn-rl',t.refresh);
+  // Monthly
+  _set('lbl-mtop',t.monthly_top);  _set('btn-rm',t.refresh);
+  _set('prize-title',t.prize_title);
+  _set('rwd-lock-t',t.rwd_title); _set('rwd-lock-s',t.rwd_sub); _set('rwd-lock-btn',t.rwd_btn);
+  // Badges
+  _set('lbl-badges',t.badges_lbl); _set('lbl-stats',t.stats_lbl);
+  _set('st-lbl-g',t.games_lbl); _set('st-lbl-c',t.correct_lbl); _set('st-lbl-s',t.streak_lbl);
+  // Category buttons
+  document.querySelectorAll('.cbtn').forEach(b=>{
+    const cl=b.querySelector('.cl'); if(cl&&t.cats[b.dataset.i]) cl.textContent=t.cats[b.dataset.i];
+  });
+  // Result screen
+  const rlb=document.querySelector('.rlb'); if(rlb) rlb.textContent=t.score;
+  _set('sk-correct',t.correct); _set('sk-wrong',t.wrong); _set('sk-time',t.time);
+  const rba=_$('btn-playagain'); if(rba) rba.textContent=t.playagain;
+  const rbh=_$('btn-backhome'); if(rbh) rbh.textContent=t.backhome;
+  // Quiz screen
+  const qn=document.querySelector('.qi'); // keep dynamic
+  // Streak
+  _set('sk-txt',t.streak_txt);
+  // Gamification strings
+  _set('lim-txt',t.limit_txt);
+  // Modal
+  _set('m-title',t.m_title); _set('m-sub',t.m_sub); _set('m-per',t.m_per);
+  _set('m-cta',t.m_cta); _set('m-later',t.m_later);
+  _html('pk1',t.pk1); _html('pk2',t.pk2); _html('pk3',t.pk3); _html('pk4',t.pk4); _html('pk5',t.pk5);
+}
+
+// ── LANGUAGE SCREEN ───────────────────────────────────────────────
+function _pick(l){
+  _L=l; _ls(_LK,l); _ut();
+  const sc=_$('ls'); sc.classList.add('off');
+  _updateLangBadge(l); _initUserUI();
+}
+function _changeLang(){
+  _ls(_LK,null);
+  const sc=_$('ls'); sc.classList.remove('off'); sc.style.animation='';
+}
+function _updateLangBadge(l){
+  const b=_$('lang-badge');
+  if(b) b.textContent={ht:'🇭🇹 Kreyòl',fr:'🇫🇷 Français',en:'🇺🇸 English'}[l]||l;
+}
+
+// ── CATEGORIES INIT ───────────────────────────────────────────────
+(function(){
+  const t=_T[_L];
+  _$('cg').innerHTML=_C.map(c=>`<button class="cbtn" data-i="${c.i}" onclick="_sc(this,'${c.i}')"><span class="ic">${c.e}</span><span class="cl">${t.cats[c.i]||c.i}</span></button>`).join('');
+  const def=document.querySelector('[data-i="haiti"]'); if(def) _sc(def,'haiti');
+})();
+function _sc(el,id){document.querySelectorAll('.cbtn').forEach(b=>b.classList.remove('on'));el.classList.add('on');_x.cat=id;}
+function _dd(el){document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('on'));el.classList.add('on');_x.dif=el.dataset.d;}
+
+// ── TABS ──────────────────────────────────────────────────────────
+function _tab(v){
+  const ids={p:'pTab',l:'lTab',m:'mTab',b:'bTab'};
+  Object.entries(ids).forEach(([k,id])=>{const e=_$(id);if(e)e.style.display=k===v?'block':'none';});
+  document.querySelectorAll('.ntab').forEach((b,i)=>b.classList.toggle('on',['p','l','m','b'][i]===v));
+  if(v==='l') _rl();
+  if(v==='m'){_rm();_rw();}
+  if(v==='b'){const s=_stats();_renderBadges(s);_set('st-games',s.g);_set('st-corr',s.tc);_set('st-streak',s.bs);}
+}
+
+// ── GAMIFICATION INIT ─────────────────────────────────────────────
+function _initUserUI(){
+  const name=_$('pName').value.trim()||(_ls(_UK)||{}).name||'';
+  const s=_stats(); const ip=_isPrem(); s.ip=ip;
+  // Avatar
+  const av=_$('usr-av'); if(av){av.textContent=name?name[0].toUpperCase():'?'; av.className='usr-av'+(ip?' prem':'');}
+  _set('usr-nm',name||'—');
+  // Level
+  let lvli=0; for(let i=0;i<_LVL_PTS.length;i++){if(s.tp>=_LVL_PTS[i])lvli=i;}
+  const lvlName=(_t('lvls')||[])[lvli]||'⭐'; _set('usr-lv',lvlName);
+  const nxtPts=_LVL_PTS[lvli+1]; 
+  _set('lv-name',lvlName);
+  if(nxtPts){_set('lv-next',(nxtPts-s.tp)+' '+_t('lvl_next'));const pct=Math.round(((s.tp-_LVL_PTS[lvli])/(nxtPts-_LVL_PTS[lvli]))*100);const lf=_$('lv-fill');if(lf)lf.style.width=Math.min(100,pct)+'%';}
+  else{_set('lv-next','MAX');const lf=_$('lv-fill');if(lf)lf.style.width='100%';}
+  // Points
+  _set('usr-pts',s.tp.toLocaleString());
+  // Plan
+  const pt=_$('usr-ptag'); if(pt){pt.textContent=ip?'✨ PREMIUM':'FREE'; pt.className=ip?'ptag-p':'ptag-f';}
+  // Limit
+  const today=new Date().toDateString();
+  if(today!==s.lpd){s.gpd=0;s.lpd=today;_sStats(s);}
+  const lb=_$('lim-bar'); if(lb){
+    if(ip){lb.style.display='none';}
+    else{lb.style.display='flex';_set('lim-cnt',(Math.max(0,_FREE_MAX-s.gpd))+'/'+_FREE_MAX);}
+  }
+  // Streak
+  _updateStreakUI();
+  // Daily
+  _updateDailyUI();
+  // Premium reward section
+  const rl=_$('rwd-lock'); if(rl) rl.style.display=ip?'none':'block';
+}
+
+// ── STREAK ────────────────────────────────────────────────────────
+function _updateStreakUI(){
+  const sd=_streak(); const today=new Date().toDateString(); const yest=new Date(Date.now()-86400000).toDateString();
+  if(sd.lastDate&&sd.lastDate!==today&&sd.lastDate!==yest){sd.count=0;_sStreak(sd);}
+  _set('sk-cnt',sd.count);
+  const btn=_$('sk-btn'); const claimed=sd.lastClaim===today;
+  if(btn){btn.disabled=claimed;btn.textContent=claimed?'✓':('+'+Math.min(200,50+sd.count*10)+' pts');}
+}
+function _claimStreak(){
+  const today=new Date().toDateString(); const sd=_streak();
+  if(sd.lastClaim===today)return;
+  const yest=new Date(Date.now()-86400000).toDateString();
+  sd.count=(sd.lastDate===today||sd.lastDate===yest)?(sd.count+1):1;
+  sd.lastDate=today; sd.lastClaim=today; _sStreak(sd);
+  const bonus=Math.min(200,50+sd.count*10);
+  const s=_stats(); s.tp+=bonus; if(sd.count>s.bs)s.bs=sd.count; _sStats(s);
+  _set('usr-pts',s.tp.toLocaleString());
+  const btn=_$('sk-btn'); if(btn){btn.disabled=true;btn.textContent='✓';}
+  _notif('🔥',_t('streak_bonus'),'+'+bonus+' pts');
+  _checkBadges();
+}
+
+// ── DAILY CHALLENGE ───────────────────────────────────────────────
+function _updateDailyUI(){
+  const today=new Date().toDateString(); const dd=_ls(_DK)||{};
+  const idx=Math.floor(Date.now()/86400000)%_DAILY_POOL.length;
+  const ch=_DAILY_POOL[idx]; const done=dd.date===today;
+  const t=_T[_L];
+  const catName=t.cats[ch.cat]||ch.cat;
+  const diffName=t.diffs[ch.diff]||ch.diff;
+  const dc=_$('dc-card'); if(dc)dc.className='daily-card'+(done?' done':'');
+  _set('dc-title',done?t.daily_done:t.daily_title);
+  _set('dc-sub',catName+' · '+diffName);
+  _set('dc-pts',done?'✓':('+'+ch.pts+' pts'));
+}
+function _startDaily(){
+  const today=new Date().toDateString(); const dd=_ls(_DK)||{};
+  if(dd.date===today){_msg(_t('daily_done'));return;}
+  const idx=Math.floor(Date.now()/86400000)%_DAILY_POOL.length;
+  const ch=_DAILY_POOL[idx];
+  const btn=document.querySelector(`[data-i="${ch.cat}"]`); if(btn)_sc(btn,ch.cat);
+  document.querySelectorAll('.dbtn').forEach(b=>b.classList.toggle('on',b.dataset.d===ch.diff));
+  _x.dif=ch.diff; _x.isDaily=true; _x.dailyBonus=ch.pts;
+  _msg('⚡ '+_t('daily_title'));
+}
+
+// ── PREMIUM ───────────────────────────────────────────────────────
+function _showPrem(){const m=_$('prem-modal');if(m)m.classList.remove('off');}
+function _hidePrem(){const m=_$('prem-modal');if(m)m.classList.add('off');}
+function _closePremOuter(e){if(e.target.id==='prem-modal')_hidePrem();}
+function _doPrem(){
+  const exp=new Date(Date.now()+30*24*3600000).toISOString();
+  _ls(_PK,{active:true,exp,plan:'monthly'});
+  const s=_stats(); s.ip=true; _sStats(s);
+  _hidePrem(); _notif('👑',_t('prem_now'),_t('prem_now_sub'));
+  setTimeout(_initUserUI,500); _checkBadges();
+}
+
+// ── POINTS ────────────────────────────────────────────────────────
+function _calcPts(tLeft,maxT,diff,streakN){
+  const base={easy:10,medium:20,hard:35}[diff]||10;
+  const spd=Math.round((tLeft/maxT)*base*0.5);
+  const sk=Math.min(5,streakN)*5;
+  const pBonus=_isPrem()?Math.round((base+spd+sk)*0.2):0;
+  return base+spd+sk+pBonus;
+}
+
+// ── BADGES ────────────────────────────────────────────────────────
+function _renderBadges(s){
+  const g=_$('bdg-grid'); if(!g)return;
+  g.innerHTML=_BADGES.map(b=>{
+    const unl=b.c(s); const nm=b.n[_L]||b.n.ht;
+    return `<div class="bdg-card ${unl?'unl':'lk'}" title="${nm}"><span class="bdg-em">${b.e}</span><div class="bdg-nm">${nm}</div></div>`;
+  }).join('');
+}
+function _checkBadges(){
+  const s=_stats(); let changed=false;
+  _BADGES.forEach(b=>{if(!s.bdg.includes(b.id)&&b.c(s)){s.bdg.push(b.id);_notif(b.e,_t('new_badge'),b.n[_L]||b.n.ht);changed=true;}});
+  if(changed){_sStats(s);_renderBadges(s);}
+}
+
+// ── NOTIFICATION ──────────────────────────────────────────────────
+let _nTimer=null;
+function _notif(ic,tit,msg){
+  _set('nf-ic',ic);_set('nf-tit',tit);_set('nf-msg',msg);
+  const n=_$('notif'); if(!n)return;
+  n.classList.add('on'); clearTimeout(_nTimer); _nTimer=setTimeout(_hideNotif,4000);
+}
+function _hideNotif(){const n=_$('notif');if(n)n.classList.remove('on');}
+
+// ── TOAST ─────────────────────────────────────────────────────────
+function _msg(m){const t=_$('tst');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2500);}
+
+// ── SCREEN SWITCH ─────────────────────────────────────────────────
+function _ss(id){document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));const e=_$(id);if(e)e.classList.add('on');}
+
+// ── LEADERBOARD ───────────────────────────────────────────────────
+async function _rl(){
+  _html('lb',`<div class="lem">${_t('loading')}</div>`);
+  try{
+    const r=await fetch('/api/leaderboard'); const lb=await r.json();
+    const t=_T[_L];
+    if(!lb.length){_html('lb',`<div class="lem">${t.lbempty}</div>`);return;}
+    const rc=['g','s','b'];
+    _html('lb',lb.map((e,i)=>`<div class="li ${i<3?'top':''}">
+      <div class="lr ${rc[i]||''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="lif"><div class="ln">${_e(e.name)} ${e.is_premium?'<span class="ptag-p">PREMIUM</span>':''}</div>
+      <div class="lm">${t.cats[e.category]||e.category} · ${t.diffs[e.difficulty]||e.difficulty}</div></div>
+      <div class="ls">${e.score} ${t.pts}</div></div>`).join('')
+    +`<div class="rwd-lock" style="margin-top:14px"><div class="rwd-lock-ic">🔔</div>
+      <div class="rwd-lock-tx">${t.rwd_title}</div>
+      <button class="rwd-lock-btn" onclick="_showPrem()">${t.unlock}</button></div>`);
+  }catch{_html('lb',`<div class="lem">${_t('lberr')}</div>`);}
+}
+
+async function _rm(){
+  _html('mlb','<div class="lem">⏳...</div>');
+  try{
+    const r=await fetch('/api/leaderboard/monthly'); const lb=await r.json();
+    const t=_T[_L];
+    // Podium
+    ['pod1','pod2','pod3'].forEach((id,i)=>{
+      const e=lb[i]; _set(id+'-n',e?e.name:'—'); _set(id+'-p',e?(e.score+' pts'):'—');
+    });
+    const ip=_isPrem(); const rl=_$('rwd-lock'); if(rl)rl.style.display=ip?'none':'block';
+    if(!lb.length){_html('mlb',`<div class="lem">${t.lbempty}</div>`);return;}
+    const rc=['g','s','b'];
+    _html('mlb',lb.map((e,i)=>`<div class="li ${i<3?'top':''}">
+      <div class="lr ${rc[i]||''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+      <div class="lif"><div class="ln">${_e(e.name)}</div>
+      <div class="lm">${t.cats[e.category]||e.category} · ${t.diffs[e.difficulty]||e.difficulty}</div></div>
+      <div class="ls">${e.score} ${t.pts}</div></div>`).join(''));
+  }catch{_html('mlb','<div class="lem">Erè.</div>');}
+}
+
+async function _rw(){
+  try{
+    const r=await fetch('/api/leaderboard/monthly/winner'); const d=await r.json();
+    const days=d.days_left||0; const t=_T[_L];
+    const cd=_$('prize-countdown');
+    if(cd) cd.textContent=days<=3&&days>0?`⚠️ ${days} ${t.days_left}`:(days===0?'🎊 Dènye jou!':`⏰ ${days} ${t.days_left}`);
+    const cl=_$('cur-leader');
+    if(cl) cl.textContent=d.winner?(t.leader_now+' '+d.winner.name+' — '+d.winner.score+' pts'):t.no_leader;
+    if(days<=3&&days>0&&!_isPrem()) _notif('🏆',_t('top3_msg'),_t('go_prem'));
+  }catch(e){}
+}
+
+// ── START QUIZ ────────────────────────────────────────────────────
+async function _go(){
+  const name=_$('pName').value.trim();
+  if(!name){_msg(_t('noname'));return;}
+  if(!_x.cat){_msg(_t('nocat'));return;}
+  const s=_stats(); const ip=_isPrem();
+  const today=new Date().toDateString();
+  if(today!==s.lpd){s.gpd=0;s.lpd=today;}
+  if(!ip&&s.gpd>=_FREE_MAX){_showPrem();_notif('🔒',_t('daily_limit'),_t('daily_limit_sub'));return;}
+  _ac.tabHide=0; _ac.suspicious=false;
+  if(name) _ls(_UK,{name});
+  try{
+    const r=await fetch('/api/start',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name,category:_x.cat,difficulty:_x.dif,lang:_L})});
+    const d=await r.json(); if(d.error){_msg(d.error);return;}
+    _x={..._x,tok:d.token,tot:d.total,scr:0,ok:0,ko:0,t0:Date.now(),ans:false,done:false,nq:null};
+    _ss('s1'); _lq(d.question,d.q_num,d.total); _stTimer();
+  }catch(e){_msg(_t('connerr'));}
+}
+
+// ── LOAD QUESTION ─────────────────────────────────────────────────
+function _lq(q,num,tot){
+  const t=_T[_L]; const cm=_C.find(c=>c.i===_x.cat);
+  _set('qn',num); _set('qt',tot);
+  const pf=_$('pf'); if(pf)pf.style.width=`${((num-1)/tot)*100}%`;
+  _set('qs',_x.scr);
+  _set('qcat',cm?`${cm.e} ${t.cats[cm.i]||cm.i}`:'');
+  _set('qdf',t.diffs[_x.dif]||_x.dif);
+  _set('qtxt',q.q);
+  const L=['A','B','C','D'];
+  _html('olist',q.opts.map((o,i)=>`<button class="ob" onclick="_ans(this,${i})"><span class="olt">${L[i]}</span><span>${o}</span></button>`).join(''));
+  _$('fb').className='fb'; _$('abar').className='abar'; _x.ans=false; _x.done=false; _x.nq=null;
+}
+
+// ── TIMER ─────────────────────────────────────────────────────────
+function _stTimer(){
+  clearInterval(_x.ti);
+  const mx=_x.dif==='hard'?15:_x.dif==='medium'?20:25; _x.tl=mx;
+  function tk(){
+    const c=_$('tc'),n=_$('tn'); if(!c)return;
+    c.style.strokeDashoffset=163.4*(1-_x.tl/mx);
+    n.textContent=_x.tl; c.className=_x.tl<=5?'tp ug':'tp';
+    if(_x.tl<=0){clearInterval(_x.ti);if(!_x.ans)_timeUp();}
+    _x.tl--;
+  }
+  tk(); _x.ti=setInterval(tk,1000);
+}
+function _timeUp(){
+  _x.ans=true; _x.ko++;
+  document.querySelectorAll('.ob').forEach(b=>b.disabled=true);
+  _sfb(false,_t('timesup')); _auto();
+}
+function _auto(){
+  const ab=_$('abar'),af=_$('afill'); ab.className='abar show';
+  af.style.transition='none'; af.style.width='100%';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{af.style.transition='width 1.5s linear';af.style.width='0%';}));
+  setTimeout(()=>{if(_x.done)_fin();else if(_x.nq){_lq(_x.nq,_x.nn,_x.nt);_stTimer();}else _fin();},1500);
+}
+
+// ── ANSWER ────────────────────────────────────────────────────────
+async function _ans(el,idx){
+  if(_x.ans)return; _x.ans=true; clearInterval(_x.ti);
+  if(!_acOk()){console.warn('[Anti-cheat] Fast answer');}
+  document.querySelectorAll('.ob').forEach(b=>b.disabled=true);
+  try{
+    const r=await fetch('/api/answer',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({token:_x.tok,answer:idx})});
+    const d=await r.json();
+    document.querySelectorAll('.ob').forEach((b,i)=>{
+      if(i===d.correct_answer)b.classList.add('ok');
+      else if(i===idx&&!d.correct)b.classList.add('ng');
+    });
+    _x.scr=d.score; if(d.correct)_x.ok++;else _x.ko++;
+    _set('qs',_x.scr);
+    _sfb(d.correct,d.correct?`${_t('excellent')} +${d.pts} ${_t('pts')}`:`${_t('correct_ans')} ${d.correct_text}`);
+    if(d.done){_x.done=true;}else{_x.nq=d.question;_x.nn=d.q_num;_x.nt=d.total;}
+    _auto();
+  }catch(e){_sfb(false,_t('connerr'));}
+}
+function _sfb(ok,msg){const b=_$('fb');b.className=`fb on ${ok?'ok':'ng'}`;b.innerHTML=`<span>${ok?'✅':'❌'}</span><span>${msg}</span>`;}
+
+// ── FINISH ────────────────────────────────────────────────────────
+async function _fin(){
+  clearInterval(_x.ti);
+  const elapsed=Math.round((Date.now()-_x.t0)/1000);
+  try{await fetch('/api/finish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:_x.tok,time_elapsed:elapsed})});}catch(e){}
+
+  const tot=_x.tot; const pct=Math.round((_x.ok/tot)*100);
+  // Save stats
+  const s=_stats(); const ip=_isPrem();
+  s.g++; s.gpd++; s.tc+=_x.ok; if(_x.ok===tot)s.pg++;
+  // Points
+  const mx=_x.dif==='hard'?15:_x.dif==='medium'?20:25;
+  const sd=_streak(); let earned=0;
+  for(let i=0;i<_x.ok;i++) earned+=_calcPts(Math.max(0,_x.tl),mx,_x.dif,i);
+  if(_x.isDaily){earned+=_x.dailyBonus;_ls(_DK,{date:new Date().toDateString()});s.dd++;_x.isDaily=false;}
+  if(ip) earned=Math.round(earned*1.2);
+  s.tp+=earned; s.lpd=new Date().toDateString(); _sStats(s);
+  // Bonus UI
+  const rb=_$('res-bonus'); if(rb)rb.style.display='block';
+  _set('rb-pts','+'+earned+' pts');
+  _set('rb-tit','⭐ '+{ht:'Pwen Ganye',fr:'Points Gagnés',en:'Points Earned'}[_L]);
+  _set('rb-bk',_x.ok+' '+(ip?{ht:'bon rep. · +20% premium',fr:'bonnes rép. · +20% premium',en:'correct · +20% premium'}[_L]:{ht:'bon repons',fr:'bonnes réponses',en:'correct answers'}[_L]));
+  _set('usr-pts',s.tp.toLocaleString());
+  // Result screen
+  _set('rpct',pct+'%'); _set('scor',_x.ok); _set('swrg',_x.ko); _set('stim',elapsed+'s');
+  const t=_T[_L];
+  const titles=[[90,t.genius,t.genius_s],[70,t.bravo,t.bravo_s],[50,t.notbad,t.notbad_s],[0,t.learn,t.learn_s]];
+  const [,ti,su]=titles.find(([v])=>pct>=v);
+  _set('rtit',ti); _set('rsub',su);
+  _ss('s2'); setTimeout(()=>{const rc=_$('rc');if(rc)rc.style.strokeDashoffset=408.4*(1-pct/100);},100);
+  // Notify near top 3
+  setTimeout(async()=>{
+    try{const r=await fetch('/api/leaderboard/monthly');const lb=await r.json();
+      if(lb.length>=3&&s.tp>lb[2].score*0.8&&!ip){_notif('🏆',_t('top3_msg'),_t('go_prem'));}}catch(e){}
+  },2000);
+  _checkBadges();
+}
+
+function _home(){clearInterval(_x.ti);_ss('s0');}
+
+// ── BOOT ─────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded',()=>{
+  // Anti-cheat click timing
+  document.addEventListener('mousedown',_acStart,true);
+  document.addEventListener('touchstart',_acStart,{passive:true,capture:true});
+  // Result bonus hidden by default
+  const rb=_$('res-bonus'); if(rb)rb.style.display='none';
+  // Lang from storage
+  const saved=_ls(_LK);
+  if(saved&&['ht','fr','en'].includes(saved)){
+    _L=saved; _$('ls').classList.add('off'); _ut(); _updateLangBadge(saved); _initUserUI();
+  } else {
+    _ut();
+  }
+  // PWA service worker
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/service-worker.js',{scope:'/'})
+      .then(r=>console.log('[PWA] SW registered'))
+      .catch(e=>console.warn('[PWA] SW error:',e));
+  }
+  // Name input refresh
+  const ni=_$('pName'); if(ni) ni.addEventListener('input',()=>setTimeout(_initUserUI,80));
+});
+
+// PWA install button
+let _pwaPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();_pwaPrompt=e;setTimeout(()=>{
+  if(!_pwaPrompt)return;
+  const btn=document.createElement('button');
+  btn.style.cssText='position:fixed;bottom:78px;right:14px;background:var(--accent);color:#0a0a0f;border:none;border-radius:22px;padding:9px 16px;font-family:Syne,sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;z-index:950;box-shadow:0 4px 18px rgba(240,192,64,.4)';
+  btn.textContent={ht:'📲 Enstale App',fr:'📲 Installer',en:'📲 Install App'}[_L]||'📲 Install';
+  btn.onclick=async()=>{if(!_pwaPrompt)return;_pwaPrompt.prompt();const{outcome}=await _pwaPrompt.userChoice;if(outcome==='accepted')btn.remove();_pwaPrompt=null;};
+  document.body.appendChild(btn); setTimeout(()=>{if(btn.parentNode)btn.remove();},10000);
+},3500);});
+</script>
+
+</body>
