@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import os, random, hashlib, json
 from datetime import datetime
-import psycopg2
-from psycopg2.extras import RealDictCursor
+import psycopg
+from psycopg.extras import RealDictCursor
 
 # ── MODIL PREMIUM (ajoute pwopman san kase backend egzistan) ─────────────────
 try:
@@ -458,7 +458,7 @@ def get_db():
     url = DATABASE_URL
     if url.startswith('postgres://'):
         url = url.replace('postgres://', 'postgresql://', 1)
-    conn = psycopg2.connect(url, cursor_factory=RealDictCursor)
+    conn = psycopg.connect(url, cursor_factory=RealDictCursor)
     return conn
 
 def init_db():
